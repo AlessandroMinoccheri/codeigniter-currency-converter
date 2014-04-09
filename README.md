@@ -23,7 +23,7 @@ The list of available currency is
 ##Requirements
 
 * CodeIgniter 2.1.0
-* PHP5.2 or gretaer
+* PHP 5.2 or gretaer
 
 ---
 
