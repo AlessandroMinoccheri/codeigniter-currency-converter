@@ -16,8 +16,6 @@ User can configure in hour the time of currency rates update.
 For example ifuser sets to update currency rates every hour, this library get the currency conversion from yahoo finance the first time, store it inside the database and for the next hour it takes conversion rates from the database if exist.
 In this way reduce the request time to convert and every hour currency rates are updated.
 
-The list of available currency is
-
 ---
 
 ##Requirements
