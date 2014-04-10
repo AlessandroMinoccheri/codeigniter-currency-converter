@@ -5,7 +5,7 @@ Alessandro Minoccheri
 V 1.0.0
 09-04-2014
 
-https://github.com/AlessandroMinoccheri
+https://github.com/AlessandroMinoccheri/codeigniter-currency-converter
 
 */
 
@@ -17,8 +17,9 @@ class CurrencyConverter{
 
     public function convert($from_Currency,$to_Currency,$amount, $hour_difference = 1) {
         if($from_Currency != $to_Currency){
-            $CI =& get_instance();
+            $CI = & get_instance();
             $rate = 0;
+            $find = 0;
 
             if ($from_Currency=="PDS")
                 $from_Currency = "GBP";
@@ -30,7 +31,7 @@ class CurrencyConverter{
             $CI->db->where('from', $from_Currency);
             $CI->db->where('to', $to_Currency);
             $query = $CI->db->get();
-            $find = 0;
+            
             foreach ($query->result() as $row){
                 $find = 1;
                 $last_updated = $row->modified;
@@ -49,22 +50,22 @@ class CurrencyConverter{
                     }
 
                     if(isset($result)){
-                        $allData = explode(',',$result); /* Get all the contents to an array */
+                        $allData = explode(',',$result);
                         $rate = $allData[1];
                     }
                     else{
                         $rate = 0;
                     }
 
-                    //update
                     $data = array(
                         'from'  => $from_Currency,
                         'to' => $to_Currency,
                         'rates' => $rate,
                         'modified' => date('Y-m-d H:i:s'),
                      );
-                     $CI->db->where('id', $row->id);
-                     $CI->db->update('currency_converter',$data);     
+
+                    $CI->db->where('id', $row->id);
+                    $CI->db->update('currency_converter',$data);     
                 }
                 else{
                     $rate = $row->rates;
@@ -81,7 +82,7 @@ class CurrencyConverter{
                 }
 
                 if(isset($result)){
-                    $allData = explode(',',$result); /* Get all the contents to an array */
+                    $allData = explode(',',$result);
                     $rate = $allData[1];
                 }
                 else{
@@ -95,10 +96,11 @@ class CurrencyConverter{
                     'created' => date('Y-m-d H:i:s'),
                     'modified' => date('Y-m-d H:i:s'),
                 );
+
                 $CI->db->insert('currency_converter',$data); 
             }
 
-            $value = (double)$rate*(double)$amount.'</p>';
+            $value = (double)$rate * (double)$amount.'</p>';
             return number_format((double)$value, 2, '.', '');
         }
         else{
@@ -107,7 +109,7 @@ class CurrencyConverter{
     }
 
     private function checkIfExistTable(){
-        $CI =& get_instance();
+        $CI = & get_instance();
 
         if ($CI->db->table_exists('contacts') ){
             return(true);
