@@ -13,20 +13,20 @@ This library convert your price in every currency of the world.
 It works with yahoo finance api and store currency rates inside the site database.
 User can configure in hour the time of currency rates update.
 
-For example ifuser sets to update currency rates every hour, this library get the currency conversion from yahoo finance the first time, store it inside the database and for the next hour it takes conversion rates from the database if exist.
+For example if a user sets to update currency rates every hour, this library get the currency conversion from yahoo finance the first time, store it inside the database and for the next hour it takes conversion rates from the database if exist.
 In this way reduce the request time to convert and every hour currency rates are updated.
 
 ---
 
 ##Requirements
 
-* CodeIgniter 2.1.0
+* CodeIgniter 2.x
 * PHP 5.2 or gretaer
 
 ---
 
 #Installation
-Drag and drop the application/libraries/CurrencyConverter.php file into your application's directories. Load it from your application/config/autoload.php using: 
+Drag and drop the application/libraries/CurrencyConverter.php file into your application directories. Load it from your application/config/autoload.php using: 
 ```
 $autoload['libraries'] = array('database', 'CurrencyConverter');
 ```
