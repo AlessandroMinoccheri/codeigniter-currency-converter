@@ -10,7 +10,7 @@ class Example_model extends CI_Model {
 
     public function convert(){
         $amount = '2100,00';
-        $result = $this->CurrencyConverter->convert('GBP', 'EUR', $amount, '1');
+        $result = $this->CurrencyConverter->convert('GBP', 'EUR', $amount, 0, 1);
 
         return($result);
     }

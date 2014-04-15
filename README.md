@@ -10,11 +10,13 @@ A Codeigniter library to convert your price from a currency to another
 Is very frequently that inside your sites you need to convert your price from a currency to another.
 This library convert your price in every currency of the world.
 
-It works with yahoo finance api and store currency rates inside the site database.
-User can configure in hour the time of currency rates update.
+It works with yahoo finance api and store currency rates inside the site database if you want.
+User can configure in hour the time of currency rates update, if the user doesn't want to use database, rates are updated every time with the current conversion.
 
-For example if a user sets to update currency rates every hour, this library get the currency conversion from yahoo finance the first time, store it inside the database and for the next hour it takes conversion rates from the database if exist.
+If you have set to use database, for example, user sets to update currency rates every hour, this library get the currency conversion from yahoo finance the first time, store it inside the database and for the next hour it takes conversion rates from the database if exist.
 In this way reduce the request time to convert and every hour currency rates are updated.
+
+If you haven0t set to use database, instead, every time you call the library it makes a request to yahoo api and gets the actual conversion rate. This solution is great if you have not a lot of request. Instead, if you have a lot of conversion request is better to use the database configuration.
 
 ---
 
@@ -36,7 +38,7 @@ Or inside your model you can use:
 $this->CurrencyConverter = new CurrencyConverter();
 ```
 
-It's important to have a valid database connection because the library saves conversion inside it.
+It's important to have a valid database connection because the library saves conversion inside it if you want to use it.
 
 ---
 
@@ -44,7 +46,7 @@ It's important to have a valid database connection because the library saves con
 
 To convert your price you can make a request like this from your model / controller:
 ```
-$result = $this->CurrencyConverter->convert('GBP', 'EUR', '2000,00', '1');
+$result = $this->CurrencyConverter->convert('GBP', 'EUR', '2000,00', 1, 1);
 ```
 
 ---
@@ -52,12 +54,13 @@ $result = $this->CurrencyConverter->convert('GBP', 'EUR', '2000,00', '1');
 
 The function declaration to retrieve your converted price is:
 ```
-function convert($from_Currency,$to_Currency,$amount, $hour_difference = 1)
+function convert($from_Currency,$to_Currency,$amount, $save_into_db = 1,  $hour_difference = 1)
 ```
 
 * from_Currency: is the actual price currency (Example: EUR, GBP)
 * to_Currency: is the currency that you want to convert your price (Example: EUR, GBP)
 * amount: is the price to convert (Example: 200,20)
+* save_into_db: is the variable that configure to use the database or not, if not hour_difference params is escaped
 * hour_difference: is the hour difference to update your currency conversion. For example if you have set to update currency rates every hour, this library get the currency conversion from yahoo finance the first time, store it inside the database and for the next hour it takes conversion rates from the database if exist.
 
 ---
