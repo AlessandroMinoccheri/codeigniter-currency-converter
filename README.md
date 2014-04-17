@@ -49,6 +49,10 @@ To convert your price you can make a request like this from your model / control
 $result = $this->CurrencyConverter->convert('GBP', 'EUR', '2000,00', 1, 1);
 ```
 
+To get a list of currency code you can check here:
+
+[List of available currency code](http://www.xe.com/iso4217.php )
+
 ---
 #Params
 
