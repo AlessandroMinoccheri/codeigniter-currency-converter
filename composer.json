@@ -1,0 +1,17 @@
+{
+    "name": "AlessandroMinoccheri/codeigniter-currency-converter",
+    "type": "plugin",
+    "description": "A Codeigniter library to convert your price from a currency to another",
+    "keywords": ["codeigniter","currency", "price", "convert"],
+    "homepage": "https://github.com/AlessandroMinoccheri/codeigniter-currency-converter",
+    "authors": [
+        {
+            "name": "Alessandro Minoccheri",
+            "homepage": "http://alessandrominoccheri.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    }
+}
