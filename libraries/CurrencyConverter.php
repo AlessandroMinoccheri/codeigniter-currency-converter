@@ -15,21 +15,21 @@ class CurrencyConverter{
        
     }   
 
-    public function convert($from_Currency,$to_Currency,$amount, $save_into_db = 1, $hour_difference = 1) {
-        if($from_Currency != $to_Currency){
+    public function convert($fromCurrency, $toCurrency, $amount, $saveIntoDb = 1, $hourDifference = 1) {
+        if($fromCurrency != $toCurrency){
             $CI =& get_instance();
             $rate = 0;
 
-            if ($from_Currency=="PDS")
-                $from_Currency = "GBP";
+            if ($fromCurrency=="PDS")
+                $fromCurrency = "GBP";
             
-            if($save_into_db == 1){
-                $this->checkIfExistTable();
+            if($saveIntoDb == 1){
+                $this->_checkIfExistTable();
 
                 $CI->db->select('*');
                 $CI->db->from('currency_converter');
-                $CI->db->where('from', $from_Currency);
-                $CI->db->where('to', $to_Currency);
+                $CI->db->where('from', $fromCurrency);
+                $CI->db->where('to', $toCurrency);
                 $query = $CI->db->get();
                 $find = 0;
 
@@ -37,19 +37,20 @@ class CurrencyConverter{
                     $find = 1;
                     $last_updated = $row->modified;
                     $now = date('Y-m-d H:i:s');
-                    $d_start = new DateTime($now);
-                    $d_end = new DateTime($last_updated);
-                    $diff = $d_start->diff($d_end);
+                    $dStart = new DateTime($now);
+                    $dEnd = new DateTime($lastUpdated);
+                    $diff = $d_start->diff($dEnd);
 
-                    if(((int)$diff->y >= 1) || ((int)$diff->m >= 1) || ((int)$diff->d >= 1) || ((int)$diff->h >= $hour_difference) || ((double)$row->rates == 0)){
-                        $rate = $this->getRates($from_Currency, $to_Currency);
+                    if(((int)$diff->y >= 1) || ((int)$diff->m >= 1) || ((int)$diff->d >= 1) || ((int)$diff->h >= $hourDifference) || ((double)$row->rates == 0)){
+                        $rate = $this->_getRates($fromCurrency, $toCurrency);
 
                         $data = array(
-                            'from'  => $from_Currency,
-                            'to' => $to_Currency,
+                            'from'  => $fromCurrency,
+                            'to' => $toCurrency,
                             'rates' => $rate,
                             'modified' => date('Y-m-d H:i:s'),
                          );
+
                          $CI->db->where('id', $row->id);
                          $CI->db->update('currency_converter',$data);     
                     }
@@ -59,23 +60,27 @@ class CurrencyConverter{
                 }
 
                 if($find == 0){
-                    $rate = $this->getRates($from_Currency, $to_Currency);
+                    $rate = $this->_getRates($fromCurrency, $toCurrency);
 
                     $data = array(
-                        'from'  => $from_Currency,
-                        'to' => $to_Currency,
+                        'from'  => $fromCurrency,
+                        'to' => $toCurrency,
                         'rates' => $rate,
                         'created' => date('Y-m-d H:i:s'),
                         'modified' => date('Y-m-d H:i:s'),
                     );
+
                     $CI->db->insert('currency_converter',$data); 
                 }
-                $value = (double)$rate*(double)$amount;
+
+                $value = (double)$rate * (double)$amount;
+
                 return number_format((double)$value, 2, '.', '');
             }
             else{
-                $rate = $this->getRates($from_Currency, $to_Currency);
-                $value = (double)$rate*(double)$amount;
+                $rate = $this->_getRates($fromCurrency, $toCurrency);
+                $value = (double)$rate * (double)$amount;
+
                 return number_format((double)$value, 2, '.', '');
             }
         }
@@ -84,8 +89,8 @@ class CurrencyConverter{
         }
     }
 
-    private function getRates($from_Currency, $to_Currency){
-        $url = 'http://finance.yahoo.com/d/quotes.csv?e=.csv&f=sl1d1t1&s='. $from_Currency . $to_Currency .'=X';
+    private function _getRates($fromCurrency, $toCurrency){
+        $url = 'http://finance.yahoo.com/d/quotes.csv?e=.csv&f=sl1d1t1&s='. $fromCurrency . $toCurrency .'=X';
         $handle = @fopen($url, 'r');
          
         if ($handle) {
@@ -103,7 +108,7 @@ class CurrencyConverter{
         return($rate);
     }
 
-    private function checkIfExistTable(){
+    private function _checkIfExistTable(){
         $CI =& get_instance();
 
         if ($CI->db->table_exists('currency_converter') ){
