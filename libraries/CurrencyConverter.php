@@ -39,7 +39,7 @@ class CurrencyConverter{
                     $now = date('Y-m-d H:i:s');
                     $dStart = new DateTime($now);
                     $dEnd = new DateTime($lastUpdated);
-                    $diff = $d_start->diff($dEnd);
+                    $diff = $dStart->diff($dEnd);
 
                     if(((int)$diff->y >= 1) || ((int)$diff->m >= 1) || ((int)$diff->d >= 1) || ((int)$diff->h >= $hourDifference) || ((double)$row->rates == 0)){
                         $rate = $this->_getRates($fromCurrency, $toCurrency);
