@@ -2,7 +2,7 @@
 
 /*
 Alessandro Minoccheri
-V 1.0.0
+V 1.1.0
 09-04-2014
 
 https://github.com/AlessandroMinoccheri
