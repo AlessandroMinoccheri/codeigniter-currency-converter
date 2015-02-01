@@ -4,6 +4,7 @@
     "description": "A Codeigniter library to convert your price from a currency to another",
     "keywords": ["codeigniter","currency", "price", "convert"],
     "homepage": "https://github.com/AlessandroMinoccheri/codeigniter-currency-converter",
+    "license": "MIT",
     "authors": [
         {
             "name": "Alessandro Minoccheri",
