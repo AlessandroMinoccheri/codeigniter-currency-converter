@@ -35,7 +35,7 @@ class CurrencyConverter{
 
                 foreach ($query->result() as $row){
                     $find = 1;
-                    $last_updated = $row->modified;
+                    $lastUpdated = $row->modified;
                     $now = date('Y-m-d H:i:s');
                     $dStart = new DateTime($now);
                     $dEnd = new DateTime($lastUpdated);
