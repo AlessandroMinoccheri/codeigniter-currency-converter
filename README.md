@@ -58,12 +58,12 @@ To get a list of currency code you can check here:
 
 The function declaration to retrieve your converted price is:
 ```
-function convert($from_Currency,$to_Currency,$amount, $save_into_db = 1,  $hour_difference = 1)
+function convert($from_Currency, $to_Currency, $amount, $save_into_db = 1, $hour_difference = 1)
 ```
 
 * from_Currency: is the actual price currency (Example: EUR, GBP)
 * to_Currency: is the currency that you want to convert your price (Example: EUR, GBP)
-* amount: is the price to convert (Example: 200,20)
+* amount: is the price to convert (Example: 200, 20)
 * save_into_db: is the variable that configure to use the database or not, if not hour_difference params is escaped
 * hour_difference: is the hour difference to update your currency conversion. For example if you have set to update currency rates every hour, this library get the currency conversion from yahoo finance the first time, store it inside the database and for the next hour it takes conversion rates from the database if exist.
 
