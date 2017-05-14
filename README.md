@@ -1,4 +1,4 @@
-codeigniter-currency-converter V 1.1.0
+codeigniter-currency-converter V 1.1.2
 ==============================
 
 A Codeigniter library to convert your price from a currency to another
