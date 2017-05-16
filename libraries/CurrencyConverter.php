@@ -10,9 +10,14 @@ https://github.com/AlessandroMinoccheri
 */
 
 class CurrencyConverter{
+        
+    private $dbTable;
+    
     public function __construct()
     {
-       
+       $CI =& get_instance();
+       $CI->config->load('currency_converter',TRUE);
+       $this->dbTable=$CI->config->item('currency_converter_db_table','currency_converter');
     }   
 
     public function convert($fromCurrency, $toCurrency, $amount, $saveIntoDb = 1, $hourDifference = 1) {
@@ -28,7 +33,7 @@ class CurrencyConverter{
                 $this->checkIfExistTable();
 
                 $CI->db->select('*');
-                $CI->db->from('currency_converter');
+                $CI->db->from($this->dbTable);
                 $CI->db->where('from', $fromCurrency);
                 $CI->db->where('to', $toCurrency);
                 $query = $CI->db->get();
@@ -53,7 +58,7 @@ class CurrencyConverter{
                          );
 
                          $CI->db->where('id', $row->id);
-                         $CI->db->update('currency_converter',$data);     
+                         $CI->db->update($this->dbTable,$data);     
                     } else{
                         $rate = $row->rates;
                     }
@@ -70,7 +75,7 @@ class CurrencyConverter{
                         'modified' => date('Y-m-d H:i:s'),
                     );
 
-                    $CI->db->insert('currency_converter',$data); 
+                    $CI->db->insert($this->dbTable,$data); 
                 }
 
                 $value = (double)$rate * (double)$amount;
@@ -122,7 +127,7 @@ class CurrencyConverter{
     private function checkIfExistTable(){
         $CI =& get_instance();
 
-        if ($CI->db->table_exists('currency_converter')) {
+        if ($CI->db->table_exists($this->dbTable)) {
             return(true);
         } else {
             $CI->load->dbforge();
@@ -157,7 +162,7 @@ class CurrencyConverter{
             ));
 
             $CI->dbforge->add_key('id', TRUE);
-            $CI->dbforge->create_table('currency_converter',TRUE);
+            $CI->dbforge->create_table($this->dbTable,TRUE);
         } 
     }
 }
