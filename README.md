@@ -34,7 +34,7 @@ If you haven't set to use database, instead, every time you call the library it 
 With composer you can install this package:
 
 ```
-composer require "alessandrominoccheri/codeigniter-currency-converter"
+composer require alessandrominoccheri/codeigniter-currency-converter
 ```
 
 Or Drag and drop the application/libraries/CurrencyConverter.php file into your application directories. Load it from your application/config/autoload.php using: 
