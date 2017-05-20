@@ -1,8 +1,8 @@
 codeigniter-currency-converter V 1.2.0
 ==============================
 
-[![Code Quality](https://scrutinizer-ci.com/g/alessandrominoccheri/codeigniter-currency-converter/badges/quality-score.png?b=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/alessandrominoccheri/codeigniter-currency-converter/badges/coverage.png?b=master)
+[![Code Quality](https://scrutinizer-ci.com/g/alessandrominoccheri/codeigniter-currency-converter/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/alessandrominoccheri/codeigniter-currency-converter/badges/quality-score.png?b=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/alessandrominoccheri/codeigniter-currency-converter/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/alessandrominoccheri/codeigniter-currency-converter/badges/coverage.png?b=master)
 [![Latest Stable Version](https://poser.pugx.org/alessandrominoccheri/codeigniter-currency-converter/v/stable.svg)](https://packagist.org/packages/alessandrominoccheri/codeigniter-currency-converter)
 [![License](https://poser.pugx.org/alessandrominoccheri/codeigniter-currency-converter/license.svg)](https://packagist.org/packages/alessandrominoccheri/codeigniter-currency-converter)
 [![Build Status](https://api.travis-ci.org/AlessandroMinoccheri/codeigniter-currency-converter.png)](https://travis-ci.org/AlessandroMinoccheri/codeigniter-currency-converter)
