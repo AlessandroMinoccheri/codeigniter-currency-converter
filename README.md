@@ -1,6 +1,11 @@
 codeigniter-currency-converter V 1.2.0
 ==============================
 
+[![Latest Stable Version](https://poser.pugx.org/alessandrominoccheri/codeigniter-currency-converter/v/stable.svg)](https://packagist.org/packages/alessandrominoccheri/codeigniter-currency-converter)
+[![License](https://poser.pugx.org/alessandrominoccheri/codeigniter-currency-converter/license.svg)](https://packagist.org/packages/alessandrominoccheri/codeigniter-currency-converter)
+[![Build Status](https://api.travis-ci.org/AlessandroMinoccheri/codeigniter-currency-converter.png)](https://travis-ci.org/AlessandroMinoccheri/codeigniter-currency-converter)
+[![Total Downloads](https://poser.pugx.org/alessandrominoccheri/codeigniter-currency-converter/d/total.png)](https://packagist.org/packages/alessandrominoccheri/codeigniter-currency-converter)
+
 A Codeigniter library to convert your price from a currency to another
 
 ---
