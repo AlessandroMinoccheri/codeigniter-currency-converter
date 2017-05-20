@@ -24,13 +24,20 @@ If you haven't set to use database, instead, every time you call the library it 
 
 ## Requirements
 
-* CodeIgniter 2.x
-* PHP 5.2 or gretaer
+* CodeIgniter 2.x or 3.x
+* PHP 5.3 or gretaer
 
 ---
 
 # Installation
-Drag and drop the application/libraries/CurrencyConverter.php file into your application directories. Load it from your application/config/autoload.php using: 
+
+With composer you can install this package:
+
+```
+composer require "alessandrominoccheri/codeigniter-currency-converter"
+```
+
+Or Drag and drop the application/libraries/CurrencyConverter.php file into your application directories. Load it from your application/config/autoload.php using: 
 
 ```
 $autoload['libraries'] = array('database', 'CurrencyConverter');
@@ -51,7 +58,7 @@ It's important to have a valid database connection because the library saves con
 To convert your price you can make a request like this from your model / controller:
 
 ```
-$result = $this->CurrencyConverter->convert('GBP', 'EUR', '2000,00', 1, 1);
+$result = $this->CurrencyConverter->convert('GBP', 'EUR', '2000.00', true, 1);
 ```
 
 To get a list of currency code you can check here:
@@ -68,11 +75,11 @@ The function declaration to retrieve your converted price is:
 function convert($from_Currency, $to_Currency, $amount, $save_into_db = 1, $hour_difference = 1)
 ```
 
-* from_Currency: is the actual price currency (Example: EUR, GBP)
-* to_Currency: is the currency that you want to convert your price (Example: EUR, GBP)
+* fromCurrency: is the actual price currency (Example: EUR, GBP)
+* toCurrency: is the currency that you want to convert your price (Example: EUR, GBP)
 * amount: is the price to convert (Example: 200, 20)
-* save_into_db: is the variable that configure to use the database or not, if not hour_difference params is escaped
-* hour_difference: is the hour difference to update your currency conversion. For example if you have set to update currency rates every hour, this library get the currency conversion from yahoo finance the first time, store it inside the database and for the next hour it takes conversion rates from the database if exist.
+* saveIntoDb: is the variable that configure to use the database or not, if not hour_difference params is escaped
+* hourDifference: is the hour difference to update your currency conversion. For example if you have set to update currency rates every hour, this library get the currency conversion from yahoo finance the first time, store it inside the database and for the next hour it takes conversion rates from the database if exist.
 
 ---
 

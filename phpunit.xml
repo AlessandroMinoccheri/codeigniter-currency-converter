@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.0/phpunit.xsd"
+         bootstrap="./phpunit.php"
+         colors="true">
+    <php>
+        <ini name="error_reporting" value="-1" />
+        <server name="KERNEL_DIR" value="app/" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak"/>
+    </php>
+
+    <testsuites>
+        <testsuite name="CodeIgniter Core Test Suite">
+            <directory suffix="Test.php">./tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./vendor/codeigniter/framework/application/libraries/</directory>
+        </whitelist>
+    </filter>
+</phpunit>
