@@ -132,22 +132,24 @@ class CurrencyConverter{
 
     private function getRates()
     {
-        $url = 'http://finance.yahoo.com/d/quotes.csv?e=.csv&f=sl1d1t1&s='. $this->fromCurrency . $this->toCurrency .'=X';
+        $url = 'http://api.fixer.io/latest?base=' . $this->fromCurrency . '&symbols=' . $this->toCurrency;
+
         $handle = @fopen($url, 'r');
-         
+
         if ($handle) {
             $result = fgets($handle, 4096);
             fclose($handle);
         }
 
         if (isset($result)) {
-            $allData = explode(',', $result);
-            $this->rate = $allData[1];
-        } else {
-            $this->rate = 0;
+            $conversion = json_decode($result, true);
+
+            if (isset($conversion['rates'][$this->toCurrency])) {
+                return $conversion['rates'][$this->toCurrency];
+            }
         }
 
-        return($this->rate);
+        return $this->rate = 0;
     }
 
     private function checkIfExistTable()
