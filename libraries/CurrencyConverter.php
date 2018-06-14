@@ -2,7 +2,7 @@
 
 /*
 Alessandro Minoccheri
-V 1.1.2
+V 1.3.2
 09-04-2014
 
 https://github.com/AlessandroMinoccheri
@@ -132,8 +132,7 @@ class CurrencyConverter{
 
     private function getRates()
     {
-        $url = 'http://api.fixer.io/latest?base=' . $this->fromCurrency . '&symbols=' . $this->toCurrency;
-
+        $url = 'https://free.currencyconverterapi.com/api/v5/convert?q=' . $this->fromCurrency . '_' . $this->toCurrency . '&compact=ultra' ;
         $handle = @fopen($url, 'r');
 
         if ($handle) {
@@ -143,9 +142,8 @@ class CurrencyConverter{
 
         if (isset($result)) {
             $conversion = json_decode($result, true);
-
-            if (isset($conversion['rates'][$this->toCurrency])) {
-                return $conversion['rates'][$this->toCurrency];
+            if (isset($conversion[$this->fromCurrency . '_' . $this->toCurrency])) {
+                return $conversion[$this->fromCurrency . '_' . $this->toCurrency];
             }
         }
 
