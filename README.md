@@ -1,4 +1,4 @@
-codeigniter-currency-converter V 1.3.1
+codeigniter-currency-converter V 1.3.2
 ==============================
 
 [![Code Quality](https://scrutinizer-ci.com/g/alessandrominoccheri/codeigniter-currency-converter/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/alessandrominoccheri/codeigniter-currency-converter/badges/quality-score.png?b=master)
