@@ -24,16 +24,24 @@ class CurrencyConverter{
     private $amount;
 
     private $hourDifference;
+
+    private $currencyApiKey;
     
     public function __construct()
     {
         $this->CI =& get_instance();
         $this->CI->config->load('currency_converter', TRUE);
+        
+        echo $this->CI->config->item('currency_api_key');
+
+        $this->currencyApiKey = $this->CI->config->item('currency_api_key', null);
+        
         $this->dbTable = $this->CI->config->item('currency_converter_db_table', 'currency_converter');
         $this->rate = 0;
     }
 
-    public function convert($fromCurrency, $toCurrency, $amount, $saveIntoDb = true, $hourDifference = 1) {
+    public function convert($fromCurrency, $toCurrency, $amount, $saveIntoDb = true, $hourDifference = 1)
+    {
         $this->fromCurrency = $fromCurrency;
         $this->toCurrency = $toCurrency;
         $this->amount = $amount;
@@ -132,7 +140,7 @@ class CurrencyConverter{
 
     private function getRates()
     {
-        $url = 'https://free.currencyconverterapi.com/api/v5/convert?q=' . $this->fromCurrency . '_' . $this->toCurrency . '&compact=ultra' ;
+        $url = 'https://free.currencyconverterapi.com/api/v5/convert?q=' . $this->fromCurrency . '_' . $this->toCurrency . '&compact=ultra&apiKey=' . $this->currencyApiKey ;
         $handle = @fopen($url, 'r');
 
         if ($handle) {

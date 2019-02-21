@@ -90,6 +90,14 @@ function convert($from_Currency, $to_Currency, $amount, $save_into_db = 1, $hour
 
 ---
 
+
+# Api KEY
+
+To use this library you need to add your api key inside the configuration.
+to get your api key go to this site and generate it.
+
+[Generate your api key](https://www.currencyconverterapi.com/)
+
 ---
 ## License
 
