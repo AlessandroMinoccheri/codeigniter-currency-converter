@@ -10,3 +10,4 @@ https://github.com/AlessandroMinoccheri
 */
 
 $config['currency_converter_db_table'] = 'currency_converter';
+$config['currency_api_key'] = 'YOUR_API_KEY';
