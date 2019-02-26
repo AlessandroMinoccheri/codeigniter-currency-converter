@@ -1,206 +1,204 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-/*
-Alessandro Minoccheri
-V 1.3.2
-09-04-2014
+      /*
+      Alessandro Minoccheri
+      V 1.3.2
+      09-04-2014
 
-https://github.com/AlessandroMinoccheri
+      https://github.com/AlessandroMinoccheri
 
-*/
+       */
 
-class CurrencyConverter{
-        
-    private $dbTable;
+      class CurrencyConverter{
 
-    private $CI;
+          private $dbTable;
 
-    private $rate;
+          private $CI;
 
-    private $fromCurrency;
+          private $rate;
 
-    private $toCurrency;
+          private $fromCurrency;
 
-    private $amount;
+          private $toCurrency;
 
-    private $hourDifference;
+          private $amount;
 
-    private $currencyApiKey;
-    
-    public function __construct()
-    {
-        $this->CI =& get_instance();
-        $this->CI->config->load('currency_converter', TRUE);
-        
-        echo $this->CI->config->item('currency_api_key');
+          private $hourDifference;
 
-        $this->currencyApiKey = $this->CI->config->item('currency_api_key', null);
-        
-        $this->dbTable = $this->CI->config->item('currency_converter_db_table', 'currency_converter');
-        $this->rate = 0;
-    }
+          private $currencyApiKey;
 
-    public function convert($fromCurrency, $toCurrency, $amount, $saveIntoDb = true, $hourDifference = 1)
-    {
-        $this->fromCurrency = $fromCurrency;
-        $this->toCurrency = $toCurrency;
-        $this->amount = $amount;
-        $this->hourDifference = $hourDifference;
+          public function __construct()
+          {
+              $this->CI =& get_instance();
+              $this->CI->config->load('currency_converter', TRUE);
+              
+              $this->currencyApiKey = $this->CI->config->item('currency_api_key', 'currency_converter');
 
-        if($this->fromCurrency != $this->toCurrency){
-            if ($this->fromCurrency == "PDS") {
-                $this->fromCurrency = "GBP";
-            }
-            
-            if ($saveIntoDb == true) {
-                return $this->saveIntoDatabase();
-            }
+              $this->dbTable = $this->CI->config->item('currency_converter_db_table', 'currency_converter');
+              $this->rate = 0;
+          }
 
-            $this->rate = $this->getRates();
-            $value = (double)$this->rate * (double)$amount;
+          public function convert($fromCurrency, $toCurrency, $amount, $saveIntoDb = true, $hourDifference = 1)
+          {
+              $this->fromCurrency = $fromCurrency;
+              $this->toCurrency = $toCurrency;
+              $this->amount = $amount;
+              $this->hourDifference = $hourDifference;
 
-            return number_format((double)$value, 2, '.', '');
-        }
+              if($this->fromCurrency != $this->toCurrency){
+                  if ($this->fromCurrency == "PDS") {
+                      $this->fromCurrency = "GBP";
+                  }
 
-        return number_format((double)$this->amount, 2, '.', '');
-    }
+                  if ($saveIntoDb == true) {
+                      return $this->saveIntoDatabase();
+                  }
 
-    private function saveIntoDatabase()
-    {
-        $this->checkIfExistTable();
+                  $this->rate = $this->getRates();
+                  $value = (double)$this->rate * (double)$amount;
 
-        $this->CI->db->select('*');
-        $this->CI->db->from($this->dbTable);
-        $this->CI->db->where('from', $this->fromCurrency);
-        $this->CI->db->where('to', $this->toCurrency);
-        $query = $this->CI->db->get();
+                  return number_format((double)$value, 2, '.', '');
+              }
 
-        foreach ($query->result() as $row) {
-            $lastUpdated = $row->modified;
-            $now = date('Y-m-d H:i:s');
-            $dStart = new DateTime($now);
-            $dEnd = new DateTime($lastUpdated);
-            $diff = $dStart->diff($dEnd);
+              return number_format((double)$this->amount, 2, '.', '');
+          }
 
-            if ($this->needToUpdateDatabase($diff, $row)) {
-                $this->updateDatabase($row);   
-            } else{
-                $this->rate = $row->rates;
-            }
-        }
+          private function saveIntoDatabase()
+          {
+              $this->checkIfExistTable();
 
-        if (count($query->result()) <= 0) {
-            $this->rate = $this->getRates();
+              $this->CI->db->select('*');
+              $this->CI->db->from($this->dbTable);
+              $this->CI->db->where('from', $this->fromCurrency);
+              $this->CI->db->where('to', $this->toCurrency);
+              $query = $this->CI->db->get();
 
-            $data = array(
-                'from'  => $this->fromCurrency,
-                'to' => $this->toCurrency,
-                'rates' => $this->rate,
-                'created' => date('Y-m-d H:i:s'),
-                'modified' => date('Y-m-d H:i:s'),
-            );
+              foreach ($query->result() as $row) {
+                  $lastUpdated = $row->modified;
+                  $now = date('Y-m-d H:i:s');
+                  $dStart = new DateTime($now);
+                  $dEnd = new DateTime($lastUpdated);
+                  $diff = $dStart->diff($dEnd);
 
-            $this->CI->db->insert($this->dbTable,$data); 
-        }
+                  if ($this->needToUpdateDatabase($diff, $row)) {
+                      $this->updateDatabase($row);
+                  } else{
+                      $this->rate = $row->rates;
+                  }
+              }
 
-        $value = (double)$this->rate * (double)$this->amount;
+              if (count($query->result()) <= 0) {
+                  $this->rate = $this->getRates();
 
-        return number_format((double)$value, 2, '.', '');
-    }
+                  $data = array(
+                      'from'  => $this->fromCurrency,
+                      'to' => $this->toCurrency,
+                      'rates' => $this->rate,
+                      'created' => date('Y-m-d H:i:s'),
+                      'modified' => date('Y-m-d H:i:s'),
+                  );
 
-    private function updateDatabase($row)
-    {
-        $this->rate = $this->getRates();
+                  $this->CI->db->insert($this->dbTable,$data);
+              }
 
-        $data = array(
-            'from'  => $this->fromCurrency,
-            'to' => $this->toCurrency,
-            'rates' => $this->rate,
-            'modified' => date('Y-m-d H:i:s'),
-        );
+              $value = (double)$this->rate * (double)$this->amount;
 
-        $this->CI->db->where('id', $row->id);
-        $this->CI->db->update($this->dbTable, $data);
-    }
+              return number_format((double)$value, 2, '.', '');
+          }
 
-    private function needToUpdateDatabase($diff, $row)
-    {
-        if (
-            ((int)$diff->y >= 1) ||
-            ((int)$diff->m >= 1) ||
-            ((int)$diff->d >= 1) ||
-            ((int)$diff->h >= $this->hourDifference) ||
-            ((double)$row->rates == 0)
-        ) {
-            return true;
-        }
+          private function updateDatabase($row)
+          {
+              $this->rate = $this->getRates();
 
-        return false;
-    }
+              $data = array(
+                  'from'  => $this->fromCurrency,
+                  'to' => $this->toCurrency,
+                  'rates' => $this->rate,
+                  'modified' => date('Y-m-d H:i:s'),
+              );
 
-    private function getRates()
-    {
-        $url = 'https://free.currencyconverterapi.com/api/v5/convert?q=' . $this->fromCurrency . '_' . $this->toCurrency . '&compact=ultra&apiKey=' . $this->currencyApiKey ;
-        $handle = @fopen($url, 'r');
+              $this->CI->db->where('id', $row->id);
+              $this->CI->db->update($this->dbTable, $data);
+          }
 
-        if ($handle) {
-            $result = fgets($handle, 4096);
-            fclose($handle);
-        }
+          private function needToUpdateDatabase($diff, $row)
+          {
+              if (
+                  ((int)$diff->y >= 1) ||
+                  ((int)$diff->m >= 1) ||
+                  ((int)$diff->d >= 1) ||
+                  ((int)$diff->h >= $this->hourDifference) ||
+                  ((double)$row->rates == 0)
+              ) {
+                  return true;
+              }
 
-        if (isset($result)) {
-            $conversion = json_decode($result, true);
-            if (isset($conversion[$this->fromCurrency . '_' . $this->toCurrency])) {
-                return $conversion[$this->fromCurrency . '_' . $this->toCurrency];
-            }
-        }
+              return false;
+          }
 
-        return $this->rate = 0;
-    }
+          private function getRates()
+          {
+              $url = 'https://free.currencyconverterapi.com/api/v5/convert?q=' . $this->fromCurrency . '_' . $this->toCurrency . '&compact=ultra&apiKey=' . $this->currencyApiKey ;
+              $handle = @fopen($url, 'r');
 
-    private function checkIfExistTable()
-    {
-        if ($this->CI->db->table_exists($this->dbTable)) {
-            return(true);
-        } else {
-            $this->CI->load->dbforge();
-            $this->CI->dbforge->add_field(array(
-                'id' => array(
-                    'type' => 'INT',
-                    'constraint' => 11,
-                    'unsigned' => TRUE,
-                    'auto_increment' => TRUE
-                ),
-                'from' => array(
-                    'type' => 'VARCHAR',
-                    'constraint' => '5',
-                    'null' => FALSE
-                ),
-                'to' => array(
-                    'type' => 'VARCHAR',
-                    'constraint' => '5',
-                    'null' => FALSE
-                ),
-                'rates' => array(
-                    'type' => 'VARCHAR',
-                    'constraint' => '10',
-                    'null' => FALSE
-                ),
-                'created' => array(
-                    'type' => 'DATETIME'
-                ),
-                'modified' => array(
-                    'type' => 'DATETIME'
-                )
-            ));
+              if ($handle) {
+                  $result = fgets($handle, 4096);
+                  fclose($handle);
+              }
 
-            $this->CI->dbforge->add_key('id', TRUE);
-            $this->CI->dbforge->create_table($this->dbTable, TRUE);
-        } 
-    }
+              if (isset($result)) {
+                  $conversion = json_decode($result, true);
+                  if (isset($conversion[$this->fromCurrency . '_' . $this->toCurrency])) {
+                      return $conversion[$this->fromCurrency . '_' . $this->toCurrency];
+                  }
+              }
 
-    public function getCurrencyTable()
-    {
-        return $this->dbTable;
-    }
-}
+              return $this->rate = 0;
+          }
+
+          private function checkIfExistTable()
+          {
+              if ($this->CI->db->table_exists($this->dbTable)) {
+                  return(true);
+              } else {
+                  $this->CI->load->dbforge();
+                  $this->CI->dbforge->add_field(array(
+                      'id' => array(
+                          'type' => 'INT',
+                          'constraint' => 11,
+                          'unsigned' => TRUE,
+                          'auto_increment' => TRUE
+                      ),
+                      'from' => array(
+                          'type' => 'VARCHAR',
+                          'constraint' => '5',
+                          'null' => FALSE
+                      ),
+                      'to' => array(
+                          'type' => 'VARCHAR',
+                          'constraint' => '5',
+                          'null' => FALSE
+                      ),
+                      'rates' => array(
+                          'type' => 'VARCHAR',
+                          'constraint' => '10',
+                          'null' => FALSE
+                      ),
+                      'created' => array(
+                          'type' => 'DATETIME'
+                      ),
+                      'modified' => array(
+                          'type' => 'DATETIME'
+                      )
+                  ));
+
+                  $this->CI->dbforge->add_key('id', TRUE);
+                  $this->CI->dbforge->create_table($this->dbTable, TRUE);
+              }
+          }
+
+          public function getCurrencyTable()
+          {
+              return $this->dbTable;
+          }
+      }
