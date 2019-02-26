@@ -1,14 +1,5 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-/*
-Alessandro Minoccheri
-V 1.3.2
-09-04-2014
-
-https://github.com/AlessandroMinoccheri
-
- */
-
 class CurrencyConverter
 {
 
@@ -41,6 +32,10 @@ class CurrencyConverter
 
     public function convert($fromCurrency, $toCurrency, $amount, $saveIntoDb = true, $hourDifference = 1)
     {
+        if (null === $this->currencyApiKey) {
+            throw new \Exception('Api Key missing');
+        }
+
         $this->fromCurrency = $fromCurrency;
         $this->toCurrency = $toCurrency;
         $this->amount = $amount;
