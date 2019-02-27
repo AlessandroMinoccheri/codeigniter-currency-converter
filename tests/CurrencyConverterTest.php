@@ -2,7 +2,7 @@
 
 class CurrencyConverterTest extends PHPUnit_Framework_TestCase
 {
-    private $CI;
+    private $currencyConverter;
 
     public static function setUpBeforeClass()
     {
@@ -120,5 +120,18 @@ class CurrencyConverterTest extends PHPUnit_Framework_TestCase
         $result = $this->currencyConverter->convert('NOTEXISTS', 'EUR', '2000.00', $saveIntoDatabase, $hourDifference);
 
         $this->assertEquals(0, $result);
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testThrowExceptionIfApiKeyIsNotSet()
+    {
+        $saveIntoDatabase = false;
+        $hourDifference = 1;
+
+        $this->currencyConverter = new CurrencyConverter();
+        $this->currencyConverter->setApiKey(null);
+        $this->currencyConverter->convert('EUR', 'EUR', '2000.00', $saveIntoDatabase, $hourDifference);
     }
 }

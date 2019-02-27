@@ -197,4 +197,9 @@ class CurrencyConverter
     {
         return $this->dbTable;
     }
+
+    public function setApiKey($apiKey)
+    {
+        $this->currencyApiKey = $apiKey;
+    }
 }
