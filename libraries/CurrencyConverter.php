@@ -22,7 +22,7 @@ class CurrencyConverter
     public function __construct()
     {
         $this->CI =& get_instance();
-        $this->CI->config->load('currency_converter', TRUE);
+        $this->CI->config->load('currency_converter', true);
 
         $this->currencyApiKey = $this->CI->config->item('currency_api_key', 'currency_converter');
 
@@ -162,23 +162,23 @@ class CurrencyConverter
                 'id' => array(
                     'type' => 'INT',
                     'constraint' => 11,
-                    'unsigned' => TRUE,
-                    'auto_increment' => TRUE
+                    'unsigned' => true,
+                    'auto_increment' => true
                 ),
                 'from' => array(
                     'type' => 'VARCHAR',
                     'constraint' => '5',
-                    'null' => FALSE
+                    'null' => false
                 ),
                 'to' => array(
                     'type' => 'VARCHAR',
                     'constraint' => '5',
-                    'null' => FALSE
+                    'null' => false
                 ),
                 'rates' => array(
                     'type' => 'VARCHAR',
                     'constraint' => '10',
-                    'null' => FALSE
+                    'null' => false
                 ),
                 'created' => array(
                     'type' => 'DATETIME'
@@ -188,8 +188,8 @@ class CurrencyConverter
                 )
             ));
 
-            $this->CI->dbforge->add_key('id', TRUE);
-            $this->CI->dbforge->create_table($this->dbTable, TRUE);
+            $this->CI->dbforge->add_key('id', true);
+            $this->CI->dbforge->create_table($this->dbTable, true);
         }
     }
 

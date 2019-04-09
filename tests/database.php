@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $active_group = 'default';
-$query_builder = TRUE;
+$query_builder = true;
 
 $db['default'] = array(
     'dsn'   => '',
@@ -12,17 +12,17 @@ $db['default'] = array(
     'database' => '',
     'dbdriver' => 'pdo',
     'dbprefix' => '',
-    'pconnect' => TRUE,
-    'db_debug' => TRUE,
-    'cache_on' => FALSE,
+    'pconnect' => true,
+    'db_debug' => true,
+    'cache_on' => false,
     'cachedir' => '',
     'char_set' => 'utf8',
     'dbcollat' => 'utf8_general_ci',
     'swap_pre' => '',
-    'encrypt' => FALSE,
-    'compress' => FALSE,
-    'stricton' => FALSE,
+    'encrypt' => false,
+    'compress' => false,
+    'stricton' => false,
     'failover' => array(),
-    'save_queries' => TRUE,
-    'autoinit' => TRUE
+    'save_queries' => true,
+    'autoinit' => true
 );
